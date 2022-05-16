@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="./jquery.min.js"></script>
+    <title>屏幕弹球</title>
+
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+        }
+        
+        div {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            position: absolute;
+            left: 30px;
+            top: 30px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script>
+        $(function() {
+
+            $("#btn").click(function() {
+                //body元素中添加div
+                var obj = $('<div></div>').appendTo('body');
+
+                //定义offset left  top 的初始值  以及  x,y每次移动的步长
+                var l = 30;
+                var t = 30;
+                var x = 5;
+                var y = 5;
+                //定时器，80ms触发一次
+                setInterval(function() {
+                    //浏览器窗口宽度-球体宽度（padding，margin， border、）=实际窗体宽度 高度
+                    m_w = $(window).width() - obj.outerWidth();
+                    m_h = $(window).height() - obj.outerHeight();
+                    //在每次球进行滚动时作条件判断: 首先要明确offset left是距离左边的距离
+                    //限定浏览器窗口界面，如果球的位置超出窗口界面的宽度，超出高度，向左回弹，向上回弹
+                    //如果球的位置小于窗口界面的宽度，小于界面高度，向右回弹，向下回弹
+
+                    //当l小于0的时候如果l=-100 -5 -5，-110就是向左移动
+                    //当l大于窗口的时候 l=100 +5 +5   110 就是向右移动        
+
+                    //如果球的位置大于窗口的宽度或高度或者小于窗口的宽度或高度时，
+                    //把x，y值变为负值，向相反方向滚动 也就是向左滚动，向上滚动
+                    if (l > m_w || l < 0) {
+                        x = -x;
+                    }
+
+                    if (t > m_h || t < 0) {
+                        y = -y;
+                    }
+
+                    l += x; //相当于每过80ms 距离左边窗口距离多加5
+                    t += y; //相当于每过80ms 距离上边窗口距离多加5
+
+
+                    console.log(l + "---" + t);
+
+                    obj.offset({
+                        "left": l,
+                        "top": t
+                    })
+                }, 80)
+
+            });
+
+        })
+    </script>
+
+    <input type="button" value="弹出小球" id="btn">
+
+
+</body>
+
+</html>
